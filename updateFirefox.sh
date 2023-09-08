@@ -8,7 +8,8 @@ LATEST_VERSION=$(echo $LATEST_URL | grep -oP "(?<=releases/)([0-9\.]*)")
 echo "Get latest build from download.mozilla.org . . ."; wget -q $LATEST_URL -O firefox.tar.bz2
 [ "$?" = "1" ] && echo "ERROR: Failed download tar file. please check internet connection" && exit 1
 echo "Unpacking . . ."; tar xfj firefox.tar.bz2 -C /opt; ln -s /opt/firefox/firefox /usr/local/bin/firefox
+[ ! -e /usr/local/share/applications ] && mkdir -p /usr/local/share/applications
 echo "Create .desktop file . . ."; wget -q https://raw.githubusercontent.com/mozilla/sumo-kb/main/install-firefox-linux/firefox.desktop -O /usr/local/share/applications/firefox.desktop
-[ "$?" = "1" ] && echo "ERROR: Failed firefox.desktop. please check internet connection" && exit 1
+[ "$?" = "1" ] && echo "ERROR: Failed to download firefox.desktop. please check internet connection" && exit 1
 (which update-desktop-database 2>/dev/null 1>/dev/null); [ "$?" = "0" ] && (echo "Updating desktop database . . ."; update-desktop-database)
 echo "Firefox $LATEST_VERSION installed successfully!"; exit 0
